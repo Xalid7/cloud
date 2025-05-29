@@ -1,3 +1,4 @@
+print("🚀 CI/CD TEST 01: Hello from Siyovush")
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
@@ -33,4 +34,4 @@ app.include_router(meal.router, prefix="/api")
 app.include_router(serve.router, prefix="/api")
 app.include_router(api_router)
 
-print("🚀 CI/CD TEST 01: Hello from Siyovush")
+
