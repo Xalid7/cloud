@@ -32,3 +32,5 @@ app.include_router(dashboard.router, prefix="/api/dashboard")
 app.include_router(meal.router, prefix="/api")
 app.include_router(serve.router, prefix="/api")
 app.include_router(api_router)
+
+print("🚀 CI/CD TEST 01: Hello from Siyovush")
