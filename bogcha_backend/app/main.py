@@ -1,4 +1,8 @@
-print("🚀 CI/CD TEST 01: Hello from Siyovush")
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.info("🚀 CI/CD ISHLADI — logger orqali")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
