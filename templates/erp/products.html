@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Products - Clothes Shop ERP{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="page-icon me-3">
+                <i class="fas fa-box"></i>
+            </div>
+            <h1 class="page-title">Products</h1>
+        </div>
+        <div class="d-flex align-items-center">
+            <a href="{% url 'product_create' %}" class="btn btn-primary me-3">
+                <i class="fas fa-plus"></i> Add New Product
+            </a>
+            <button class="btn btn-outline-secondary me-3">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="user-avatar">
+                <img src="https://via.placeholder.com/40" alt="User" class="rounded-circle">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ total_products }}</h3>
+                <p>Total Products</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-content">
+                <h3>${{ total_value|floatformat:0 }}</h3>
+                <p>Inventory Value</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ low_stock_count }}</h3>
+                <p>Low Stock Items</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-tags"></i>
+            </div>
+            <div class="stat-content">
+                <h3>5</h3>
+                <p>Categories</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-box me-2"></i>
+                <span>Total: {{ total_products }} products</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="me-3">Sort by: Date Created</span>
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th width="10%">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>
+                        <div class="product-avatar">
+                            <i class="fas fa-tshirt text-primary"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>{{ product.name }}</strong>
+                        {% if product.description %}
+                        <br><small class="text-muted">{{ product.description|truncatechars:50 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary">{{ product.get_category_display }}</span>
+                    </td>
+                    <td>${{ product.price }}</td>
+                    <td>
+                        <span class="{% if product.stock_quantity < 10 %}text-danger{% elif product.stock_quantity < 20 %}text-warning{% else %}text-success{% endif %}">
+                            {{ product.stock_quantity }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if product.stock_quantity == 0 %}
+                        <span class="badge bg-danger">Out of Stock</span>
+                        {% elif product.stock_quantity < 10 %}
+                        <span class="badge bg-warning">Low Stock</span>
+                        {% else %}
+                        <span class="badge bg-success">In Stock</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No products found. <a href="{% url 'product_create' %}">Add your first product</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if products %}
+    <div class="card-footer text-center">
+        <button class="btn btn-primary">Load More</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

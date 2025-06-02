@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Deals - Clothes Shop ERP{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="page-icon me-3">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <h1 class="page-title">Deals</h1>
+        </div>
+        <div class="d-flex align-items-center">
+            <a href="{% url 'deal_create' %}" class="btn btn-primary me-3">
+                <i class="fas fa-plus"></i> Add New Deal
+            </a>
+            <button class="btn btn-outline-secondary me-3">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="user-avatar">
+                <img src="https://via.placeholder.com/40" alt="User" class="rounded-circle">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-handshake me-2"></i>
+                <span>Total: {{ total_deals }} deals</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="me-3">Sort by: Date Created</span>
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th>Name</th>
+                    <th>Area</th>
+                    <th>Appointment Date</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th width="10%">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for deal in deals %}
+                <tr>
+                    <td>
+                        <div class="deal-avatar">
+                            <img src="{%static 'image/images.jpeg'%}" alt="Deal" class="rounded">
+                        </div>
+                    </td>
+                    <td>
+                        <strong>{{ deal.name }}</strong>
+                    </td>
+                    <td>{{ deal.area }}</td>
+                    <td>{{ deal.appointment_date|date:"M d, Y H:i A" }}</td>
+                    <td>${{ deal.price }}</td>
+                    <td>
+                        {% if deal.status == 'in_progress' %}
+                        <span class="badge bg-primary">IN PROGRESS</span>
+                        {% elif deal.status == 'closed' %}
+                        <span class="badge bg-success">CLOSED</span>
+                        {% else %}
+                        <span class="badge bg-secondary">PENDING</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No deals found. <a href="{% url 'deal_create' %}">Add your first deal</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if deals %}
+    <div class="card-footer text-center">
+        <button class="btn btn-primary">Load More</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

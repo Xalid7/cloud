@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Tasks - Clothes Shop ERP{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="page-icon me-3">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <h1 class="page-title">Tasks</h1>
+        </div>
+        <div class="d-flex align-items-center">
+            <a href="{% url 'task_create' %}" class="btn btn-primary me-3">
+                <i class="fas fa-plus"></i> Add New Task
+            </a>
+            <button class="btn btn-outline-secondary me-3">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="user-avatar">
+                <img src="https://via.placeholder.com/40" alt="User" class="rounded-circle">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-tasks me-2"></i>
+                <span>Total: {{ total_tasks }} tasks</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="me-3">Sort by: Due Date</span>
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th>Due Date</th>
+                    <th>Task</th>
+                    <th width="10%">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>
+                        {% if task.status == 'completed' %}
+                        <span class="status-indicator bg-success"></span>
+                        {% elif task.is_overdue %}
+                        <span class="status-indicator bg-danger"></span>
+                        {% else %}
+                        <span class="status-indicator bg-warning"></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="{% if task.is_overdue %}text-danger{% endif %}">
+                            {{ task.due_date|date:"d M Y" }}
+                        </span>
+                    </td>
+                    <td>
+                        <strong>{{ task.title }}</strong>
+                        {% if task.description %}
+                        <br><small class="text-muted">{{ task.description|truncatechars:100 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-4">
+                        No tasks found. <a href="{% url 'task_create' %}">Add your first task</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if tasks %}
+    <div class="card-footer text-center">
+        <button class="btn btn-primary">Load More</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

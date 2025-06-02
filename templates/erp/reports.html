@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports - Clothes Shop ERP{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="page-icon me-3">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <h1 class="page-title">Reports & Analytics</h1>
+        </div>
+        <div class="d-flex align-items-center">
+            <button class="btn btn-outline-secondary me-3">
+                <i class="fas fa-download"></i> Export
+            </button>
+            <button class="btn btn-outline-secondary me-3">
+                <i class="fas fa-calendar"></i> Date Range
+            </button>
+            <div class="user-avatar">
+                <img src="https://via.placeholder.com/40" alt="User" class="rounded-circle">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Metrics -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-success">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-content">
+                <h3>${{ total_sales|floatformat:0 }}</h3>
+                <p>Total Sales (30 days)</p>
+                <small class="text-success">
+                    <i class="fas fa-arrow-up"></i> +12.5% from last month
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-primary">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ deals_count }}</h3>
+                <p>Closed Deals</p>
+                <small class="text-success">
+                    <i class="fas fa-arrow-up"></i> +8.2% from last month
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-info">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ new_customers }}</h3>
+                <p>New Customers</p>
+                <small class="text-success">
+                    <i class="fas fa-arrow-up"></i> +15.3% from last month
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-warning">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ completion_rate }}%</h3>
+                <p>Task Completion</p>
+                <small class="text-success">
+                    <i class="fas fa-arrow-up"></i> +5.1% from last month
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Sales Chart -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Monthly Sales Trend</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Performance -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Category Performance</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Recent Activity -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <div class="activity-item d-flex align-items-center mb-3">
+                    <div class="activity-icon bg-success me-3">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0">New sale completed</p>
+                        <small class="text-muted">2 hours ago</small>
+                    </div>
+                </div>
+                <div class="activity-item d-flex align-items-center mb-3">
+                    <div class="activity-icon bg-primary me-3">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0">New customer registered</p>
+                        <small class="text-muted">4 hours ago</small>
+                    </div>
+                </div>
+                <div class="activity-item d-flex align-items-center mb-3">
+                    <div class="activity-icon bg-warning me-3">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0">Low stock alert: Cotton T-Shirt</p>
+                        <small class="text-muted">6 hours ago</small>
+                    </div>
+                </div>
+                <div class="activity-item d-flex align-items-center mb-3">
+                    <div class="activity-icon bg-info me-3">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0">Task completed: Update inventory</p>
+                        <small class="text-muted">8 hours ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Top Selling Products</h5>
+            </div>
+            <div class="card-body">
+                <div class="product-item d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="product-icon me-3">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0 fw-bold">Cotton T-Shirt</p>
+                            <small class="text-muted">Shirts</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-0 fw-bold">$2,999</p>
+                        <small class="text-muted">100 sold</small>
+                    </div>
+                </div>
+                <div class="product-item d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="product-icon me-3">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0 fw-bold">Denim Jeans</p>
+                            <small class="text-muted">Pants</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-0 fw-bold">$2,399</p>
+                        <small class="text-muted">30 sold</small>
+                    </div>
+                </div>
+                <div class="product-item d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="product-icon me-3">
+                            <i class="fas fa-female"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0 fw-bold">Summer Dress</p>
+                            <small class="text-muted">Dresses</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-0 fw-bold">$1,799</p>
+                        <small class="text-muted">20 sold</small>
+                    </div>
+                </div>
+                <div class="product-item d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="product-icon me-3">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0 fw-bold">Leather Jacket</p>
+                            <small class="text-muted">Jackets</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-0 fw-bold">$1,599</p>
+                        <small class="text-muted">8 sold</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Sales Chart
+const salesCtx = document.getElementById('salesChart').getContext('2d');
+const salesChart = new Chart(salesCtx, {
+    type: 'line',
+    data: {
+        labels: {{ monthly_sales|safe }}.map(item => item.month),
+        datasets: [{
+            label: 'Sales ($)',
+            data: {{ monthly_sales|safe }}.map(item => item.sales),
+            borderColor: '#667eea',
+            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return '$' + value.toLocaleString();
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Category Chart
+const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+const categoryChart = new Chart(categoryCtx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for category, sales in category_sales.items %}'{{ category }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for category, sales in category_sales.items %}{{ sales }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            backgroundColor: [
+                '#667eea',
+                '#764ba2',
+                '#f093fb',
+                '#f5576c',
+                '#4facfe'
+            ],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

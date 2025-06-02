@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Clothes Shop ERP{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="page-title">Dashboard</h1>
+        <div class="d-flex align-items-center">
+            <button class="btn btn-primary me-3">
+                <i class="fas fa-plus"></i> Add New
+            </button>
+            <button class="btn btn-outline-secondary me-3">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="user-avatar">
+                <img src="../../static/image/no-ava.png" alt="User" class="rounded-circle">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Statistics Cards -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ total_customers }}</h3>
+                <p>Customers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div class="stat-content">
+                <h3>{{ total_deals }}</h3>
+                <p>Deals</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Next Appointment Card -->
+    <div class="col-md-4">
+        <div class="card appointment-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="card-title">Next Appointment</h5>
+                    <span class="status-dot"></span>
+                </div>
+                
+                {% if next_appointment %}
+                <div class="appointment-details">
+                    <h6 class="appointment-location">{{ next_appointment.name }}</h6>
+                    <p class="appointment-address text-muted">{{ next_appointment.area }}</p>
+                    
+                    <div class="appointment-meta">
+                        <div class="row">
+                            <div class="col-6">
+                                <small class="text-muted">Appointment Date</small>
+                                <p class="mb-0">{{ next_appointment.appointment_date|date:"M d, Y, H:i" }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <small class="text-muted">Room Area</small>
+                                <p class="mb-0">{{ next_appointment.area }}</p>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">People</small>
+                                <p class="mb-0">10</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <small class="text-muted">Price</small>
+                                <p class="mb-0 price">${{ next_appointment.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline-primary btn-sm mt-3">See Detail</button>
+                </div>
+                {% else %}
+                <p class="text-muted">No upcoming appointments</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Deals -->
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Deals</h5>
+                <a href="{% url 'deals_list' %}" class="text-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% for deal in recent_deals %}
+                <div class="deal-item d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="deal-avatar me-3">
+                            <img src="{% static 'image/images.jpeg' %}" alt="Deal" class="rounded">
+                        </div>
+                        <div>
+                            <h6 class="mb-0">{{ deal.name }}</h6>
+                            <small class="text-muted">{{ deal.area }}</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-0 fw-bold">${{ deal.price }}</p>
+                        <small class="text-muted">{{ deal.appointment_date|date:"M d, H:i A" }}</small>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No recent deals</p>
+                {% endfor %}
+                
+                <div class="deal-progress mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>1824 Turkey Pen Road</span>
+                        <span class="badge bg-primary">IN PROGRESS</span>
+                    </div>
+                    <small class="text-muted">Cleveland, OH 12345</small>
+                </div>
+                
+                <div class="timeline mt-4">
+                    <div class="timeline-item">
+                        <div class="timeline-icon bg-primary"></div>
+                        <div class="timeline-content">
+                            <small class="text-muted">17 Nov 2021</small>
+                            <p class="mb-0">Installation of the new air conditioning system</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon bg-primary"></div>
+                        <div class="timeline-content">
+                            <small class="text-muted">17 Nov 2021</small>
+                            <p class="mb-0">Installation of the new air conditioning system</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary w-100 mt-3">Load More</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-md-3">
+        <!-- Customers Section -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Customers</h5>
+                <a href="{% url 'customers_list' %}" class="text-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% for customer in recent_customers %}
+                <div class="customer-item d-flex align-items-center mb-3">
+                    <div class="customer-avatar me-3">
+                        <img src="{% static 'image/images.jpeg' %}" alt="{{ customer.name }}" class="rounded-circle">
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0">{{ customer.name }}</h6>
+                        <small class="text-muted">{{ customer.email }}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                {% empty %}
+                <p class="text-muted">No customers yet</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Tasks To Do -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Tasks To Do</h5>
+                <a href="{% url 'tasks_list' %}" class="text-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% for task in upcoming_tasks %}
+                <div class="task-item d-flex align-items-center mb-3">
+                    <div class="task-date me-3">
+                        <small class="text-muted">{{ task.due_date|date:"d M Y" }}</small>
+                    </div>
+                    <div class="task-status me-2">
+                        {% if task.status == 'completed' %}
+                        <span class="status-dot bg-success"></span>
+                        {% elif task.is_overdue %}
+                        <span class="status-dot bg-danger"></span>
+                        {% else %}
+                        <span class="status-dot bg-warning"></span>
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1">
+                        <p class="mb-0">{{ task.title }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No upcoming tasks</p>
+                {% endfor %}
+                
+                <div class="add-task mt-3">
+                    <a href="{% url 'task_create' %}" class="text-primary">
+                        <i class="fas fa-plus"></i> Add new task
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Customers - Clothes Shop ERP{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="page-icon me-3">
+                <i class="fas fa-users"></i>
+            </div>
+            <h1 class="page-title">Customers</h1>
+        </div>
+        <div class="d-flex align-items-center">
+            <a href="{% url 'customer_create' %}" class="btn btn-primary me-3">
+                <i class="fas fa-plus"></i> Add New Customer
+            </a>
+            <button class="btn btn-outline-secondary me-3">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="user-avatar">
+                <img src="https://via.placeholder.com/40" alt="User" class="rounded-circle">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-th-large me-2"></i>
+                <span>Total: {{ total_customers }} customers</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="me-3">Sort by: Date Created</span>
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th width="10%">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>
+                        <div class="customer-avatar">
+                            <img src="{% static 'image/images.jpeg' %}" class="rounded-circle">
+                        </div>
+                    </td>
+                    <td>
+                        <strong>{{ customer.name }}</strong>
+                    </td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.address|truncatechars:50 }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        No customers found. <a href="{% url 'customer_create' %}">Add your first customer</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if customers %}
+    <div class="card-footer text-center">
+        <button class="btn btn-primary">Load More</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
