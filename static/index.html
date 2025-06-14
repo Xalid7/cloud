@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiyim Ulgurji Savdo Tizimi</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Form -->
+        <div id="loginForm" class="login-container">
+            <div class="login-card">
+                <h2><i class="fas fa-tshirt"></i> Kiyim Ulgurji Savdo</h2>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="username">Foydalanuvchi nomi:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Parol:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Kirish
+                    </button>
+                </form>
+                <div id="loginError" class="error-message"></div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboard" class="dashboard" style="display: none;">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <h1><i class="fas fa-tshirt"></i> Kiyim Ulgurji Savdo Tizimi</h1>
+                    <div class="user-info">
+                        <span id="currentUser"></span>
+                        <button id="logoutBtn" class="btn btn-secondary">
+                            <i class="fas fa-sign-out-alt"></i> Chiqish
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Navigation -->
+            <nav class="sidebar">
+                <ul class="nav-menu">
+                    <li><a href="#" data-section="overview" class="nav-link active">
+                        <i class="fas fa-tachometer-alt"></i> Bosh sahifa
+                    </a></li>
+                    <li><a href="#" data-section="clothing" class="nav-link">
+                        <i class="fas fa-tshirt"></i> Kiyimlar
+                    </a></li>
+                    <li><a href="#" data-section="orders" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i> Buyurtmalar
+                    </a></li>
+                    <li><a href="#" data-section="sales" class="nav-link">
+                        <i class="fas fa-cash-register"></i> Sotuvlar
+                    </a></li>
+                    <li><a href="#" data-section="reports" class="nav-link">
+                        <i class="fas fa-chart-bar"></i> Hisobotlar
+                    </a></li>
+                    <li id="usersNavItem" style="display: none;"><a href="#" data-section="users" class="nav-link">
+                        <i class="fas fa-users"></i> Foydalanuvchilar
+                    </a></li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Overview Section -->
+                <section id="overviewSection" class="content-section active">
+                    <h2>Bosh sahifa</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="todaySales">0</h3>
+                                <p>Bugungi sotuvlar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="lowStockCount">0</h3>
+                                <p>Kam qolgan kiyimlar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalClothing">0</h3>
+                                <p>Jami kiyimlar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="monthlyRevenue">0</h3>
+                                <p>Oylik daromad</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts -->
+                    <div class="alert-section">
+                        <h3>Ogohlantirishlar</h3>
+                        <div id="lowStockAlerts" class="alerts-container">
+                            <!-- Low stock alerts will be populated here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clothing Section -->
+                <section id="clothingSection" class="content-section">
+                    <div class="section-header">
+                        <h2>Kiyimlar</h2>
+                        <button id="addClothingBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Kiyim qo'shish
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="clothingTable" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nomi</th>
+                                    <th>Turi</th>
+                                    <th>O'lchami</th>
+                                    <th>Rangi</th>
+                                    <th>Miqdori</th>
+                                    <th>Narxi</th>
+                                    <th>Brand</th>
+                                    <th>Holat</th>
+                                    <th>Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Clothing items will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="ordersSection" class="content-section">
+                    <div class="section-header">
+                        <h2>Buyurtmalar</h2>
+                        <button id="addOrderBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Buyurtma qo'shish
+                        </button>
+                    </div>
+                    <div class="orders-grid" id="ordersGrid">
+                        <!-- Orders will be populated here -->
+                    </div>
+                </section>
+
+                <!-- Sales Section -->
+                <section id="salesSection" class="content-section">
+                    <h2>Sotuvlar</h2>
+                    <div class="sales-container">
+                        <div class="process-sale-form">
+                            <h3>Sotuv amalga oshirish</h3>
+                            <form id="processSaleForm">
+                                <div class="form-group">
+                                    <label for="orderSelect">Buyurtma tanlang:</label>
+                                    <select id="orderSelect" required>
+                                        <option value="">Buyurtma tanlang...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentMethod">To'lov usuli:</label>
+                                    <select id="paymentMethod" required>
+                                        <option value="cash">Naqd</option>
+                                        <option value="card">Karta</option>
+                                        <option value="transfer">O'tkazma</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="saleNotes">Izoh:</label>
+                                    <textarea id="saleNotes" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-cash-register"></i> Sotuvni amalga oshirish
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="sales-history">
+                            <h3>Bugungi sotuvlar</h3>
+                            <div id="todaySalesList" class="sales-list">
+                                <!-- Today's sales will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reportsSection" class="content-section">
+                    <h2>Hisobotlar</h2>
+                    <div class="reports-container">
+                        <div class="report-controls">
+                            <button id="generateReportBtn" class="btn btn-primary">
+                                <i class="fas fa-chart-line"></i> Oylik hisobot yaratish
+                            </button>
+                        </div>
+                        
+                        <div class="charts-container">
+                            <div class="chart-card">
+                                <h3>Sotuvlar statistikasi (so'nggi 30 kun)</h3>
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="reports-table">
+                            <h3>Oylik hisobotlar</h3>
+                            <table id="reportsTable" class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Oy/Yil</th>
+                                        <th>Sotilgan dona</th>
+                                        <th>Jami daromad</th>
+                                        <th>Foyda</th>
+                                        <th>Holat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Reports will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Users Section -->
+                <section id="usersSection" class="content-section">
+                    <div class="section-header">
+                        <h2>Foydalanuvchilar</h2>
+                        <button id="addUserBtn" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Foydalanuvchi qo'shish
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="usersTable" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Foydalanuvchi nomi</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Holat</th>
+                                    <th>Yaratilgan sana</th>
+                                    <th>Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Users will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="clothingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="clothingModalTitle">Kiyim qo'shish</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="clothingForm">
+                <div class="form-group">
+                    <label for="clothingName">Nomi:</label>
+                    <input type="text" id="clothingName" required>
+                </div>
+                <div class="form-group">
+                    <label for="clothingType">Turi:</label>
+                    <select id="clothingType" required>
+                        <option value="shirt">Ko'ylak</option>
+                        <option value="pants">Shim</option>
+                        <option value="dress">Ko'ylak (ayollar)</option>
+                        <option value="jacket">Kurtka</option>
+                        <option value="shoes">Poyabzal</option>
+                        <option value="accessories">Aksessuarlar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="clothingSize">O'lchami:</label>
+                    <select id="clothingSize" required>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="clothingColor">Rangi:</label>
+                    <input type="text" id="clothingColor" required>
+                </div>
+                <div class="form-group">
+                    <label for="clothingQuantity">Miqdori:</label>
+                    <input type="number" id="clothingQuantity" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="clothingPrice">Narxi (so'm):</label>
+                    <input type="number" id="clothingPrice" min="0" step="1000" required>
+                </div>
+                <div class="form-group">
+                    <label for="clothingMinimum">Minimum miqdor:</label>
+                    <input type="number" id="clothingMinimum" min="0" value="5">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('clothingModal')">Bekor qilish</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="orderModalTitle">Buyurtma qo'shish</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="customerName">Mijoz nomi:</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Telefon raqami:</label>
+                    <input type="tel" id="customerPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Buyurtma mahsulotlari:</label>
+                    <div id="orderItemsList">
+                        <!-- Order items will be added here -->
+                    </div>
+                    <button type="button" id="addOrderItemBtn" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i> Mahsulot qo'shish
+                    </button>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('orderModal')">Bekor qilish</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Foydalanuvchi qo'shish</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="newUsername">Foydalanuvchi nomi:</label>
+                    <input type="text" id="newUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="newUserEmail">Email:</label>
+                    <input type="email" id="newUserEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="newUserPassword">Parol:</label>
+                    <input type="password" id="newUserPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newUserRole">Rol:</label>
+                    <select id="newUserRole" required>
+                        <option value="seller">Sotuvchi</option>
+                        <option value="manager">Menejer</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('userModal')">Bekor qilish</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
